@@ -1,7 +1,8 @@
 pkg_name=certbot
 pkg_origin=bixu
-pkg_maintainer='Blake Irvin <blakeirvin@me.com>'
+pkg_maintainer='Blake Irvin <blakeirvin@me.com>, smartB Engineering <dev@smartb.eu>'
 pkg_license=('Apache-2.0')
+pkg_upstream_url='https://certbot.eff.org'
 pkg_description='The Certbot LetsEncrypt client.'
 pkg_build_deps=(
   'bixu/cacher'
