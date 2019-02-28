@@ -1,4 +1,4 @@
-pkg_name=certbot-dns-route53
+pkg_name=certbot
 pkg_origin=bixu
 pkg_maintainer='Blake Irvin <blakeirvin@me.com>'
 pkg_license=('Apache-2.0')
@@ -10,6 +10,22 @@ pkg_build_deps=(
 pkg_deps=(
   'core/bash'
   'core/python'
+)
+pkg_plugins=(
+  'dns-cloudflare'
+  'dns-cloudxns'
+  'dns-digitalocean'
+  'dns-dnsimple'
+  'dns-dnsmadeeasy'
+  'dns-gehirn'
+  'dns-google'
+  'dns-linode'
+  'dns-luadns'
+  'dns-nsone'
+  'dns-ovh'
+  'dns-rfc2136'
+  'dns-route53'
+  'dns-sakuracloud'
 )
 pkg_bin_dirs=(bin)
 pkg_svc_user='root'  #TODO: determine security standards for generated certs
@@ -35,7 +51,10 @@ do_build() {
 }
 
 do_install() {
-  pip --disable-pip-version-check install "$pkg_name==$pkg_version"
+  for plugin in ${pkg_plugins[@]}
+  do
+    pip --disable-pip-version-check install "$pkg_name-$plugin==$pkg_version"
+  done
 }
 
 do_after() {
