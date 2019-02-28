@@ -1,0 +1,5 @@
+admin_email = "admin@example.com"
+domain = "*.example.com"
+dry_run = false
+plugin = "dns-route53"
+renewal_interval = 3600

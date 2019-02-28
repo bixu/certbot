@@ -1,0 +1,14 @@
+#!{{pkgPathFor "core/bash"}}/bin/bash
+
+set -e
+
+exec 2>&1
+
+while true
+do
+  sleep {{cfg.renewal_interval}}
+  certbot renew \
+    --{{cfg.plugin}} \
+    --logs-dir={{pkg.svc_path}}/logs \
+    --config-dir={{pkg.svc_config_path}}
+done

@@ -1,0 +1,13 @@
+export HAB_CREATE_PACKAGE=false
+export HAB_HART_COMPRESSION_LEVEL=0
+export HAB_NOCOLORING=true
+export HAB_CERTBOT_DNS_ROUTE53='dry_run = true'
+
+export HISTFILE='/src/.bash_history'
+export TERM=xterm
+
+run() {
+  source /src/plan.sh
+  echo "  Executing 'hab sup run $pkg_origin/$pkg_name:"
+  hab sup run --no-color $pkg_origin/$pkg_name
+}

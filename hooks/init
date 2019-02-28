@@ -1,0 +1,8 @@
+#!{{pkgPathFor "core/bash"}}/bin/bash
+
+exec 2>&1
+
+certbot certonly \
+  --noninteractive \
+  --{{cfg.plugin}} \
+  --config='{{pkg.svc_config_path}}/{{pkg.name}}.ini' {{#if cfg.dry_run ~}}--dry-run{{/if ~}}
