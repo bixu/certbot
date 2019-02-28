@@ -1,0 +1,4 @@
+admin_email = "admin@example.com"
+domain = "*.example.com"
+dry_run = false
+renewal_interval = 10

@@ -1,15 +1,21 @@
-pkg_name=certbot
+pkg_name=certbot-dns-route53
 pkg_origin=bixu
-pkg_maintainer="Blake Irvin <blakeirvin@me.com>"
+pkg_maintainer='Blake Irvin <blakeirvin@me.com>'
 pkg_license=('Apache-2.0')
-pkg_description="The Certbot LetsEncrypt client."
+pkg_description='The Certbot LetsEncrypt client.'
+pkg_build_deps=(
+  'bixu/cacher'
+)
+
 pkg_deps=(
-  core/python
+  'core/bash'
+  'core/python'
 )
 pkg_bin_dirs=(bin)
+pkg_svc_user='root'  #TODO: determine security standards for generated certs
 
 pkg_version() {
-  pip search "$pkg_name" \
+  pip --disable-pip-version-check search "$pkg_name" \
     | grep "^$pkg_name " \
     | cut -d'(' -f2 \
     | cut -d')' -f1
@@ -21,7 +27,6 @@ do_before() {
 
 do_prepare() {
   python -m venv "$pkg_prefix"
-  # shellcheck source=/dev/null
   source "$pkg_prefix/bin/activate"
 }
 
@@ -30,9 +35,17 @@ do_build() {
 }
 
 do_install() {
-  pip install "$pkg_name==$pkg_version"
-  # Write out versions of all pip packages to package
-  pip freeze > "$pkg_prefix/requirements.txt"
+  pip --disable-pip-version-check install "$pkg_name==$pkg_version"
+}
+
+do_after() {
+  if [ $HAB_CREATE_PACKAGE == 'false' ]
+  then
+    build_line "WARN: Skipping artifact creation because 'HAB_CREATE_PACKAGE=false'"
+    _generate_artifact() {
+      return 0
+    }
+  fi
 }
 
 do_strip() {
