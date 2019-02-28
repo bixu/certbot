@@ -61,7 +61,12 @@ do_after() {
   if [ $HAB_CREATE_PACKAGE == 'false' ]
   then
     build_line "WARN: Skipping artifact creation because 'HAB_CREATE_PACKAGE=false'"
+
     _generate_artifact() {
+      return 0
+    }
+
+    _prepare_build_outputs() {
       return 0
     }
   fi
