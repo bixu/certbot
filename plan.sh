@@ -12,6 +12,9 @@ pkg_deps=(
   'core/bash'
   'core/python'
 )
+# The `pkg_plugins` array should be populated with suffixes used to identify
+# `certbot` plugins in the Python module ecosystem. For example, `dns-google`,
+# as in `certbot-dns-google`:
 pkg_plugins=(
   'dns-route53'
 )
@@ -45,6 +48,10 @@ do_install() {
   done
 }
 
+# This definition of the `do_after` callback allows us to skip artifact creation
+# (collecting and compressing files inside our package's installation directory)
+# if the `HAB_CREATE_PACKAGE` environment variable is set to 'false'. This can
+# be set in our `.studiorc` file, where it will be ignored for automated builds. 
 do_after() {
   if [ $HAB_CREATE_PACKAGE == 'false' ]
   then
