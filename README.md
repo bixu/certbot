@@ -1,11 +1,32 @@
 ### About This Service Package
-Set configuration values in your own `.toml` file and override the test
+Set configuration values in your own `.toml` file and override the default
 configurations in `default.toml` like this:
 ```
-hab config apply --remote-sup=hab1.mycompany.com myapp.prod 1 /tmp/newconfig.toml
+hab config apply --remote-sup=<hostname> <service>.<group> $(date +%s) ./foo.toml
 ```
 See https://www.habitat.sh/docs/using-habitat/#config-updates for more on
 configuration updates.
+
+#### AWS Credentials
+The current version of this package supports only certificate verification using
+Route53 DNS. You should set the appropriate `AWS_SECRET_ACCESS_KEY` and
+`AWS_ACCESS_KEY_ID` environment variables for the runtime context of the service.
+Here's an example of how `bixu/certbot` might be run as a systemd service:
+```
+[Unit]
+Description=Certbot
+[Service]
+Environment="HAB_AUTH_TOKEN=<some value>"
+Environment="AWS_ACCESS_KEY_ID=<some value>"
+Environment="AWS_SECRET_ACCESS_KEY=<some value>"
+ExecStart=/bin/hab sup run bixu/certbot
+KillMode=process
+Restart=on-failure
+[Install]
+WantedBy=default.target
+```
+Future versions of the service may support other verification plugins as well as
+other methods for handling secrets.
 
 #### Caveats
 At the moment, this package only supports Route53 DNS verification of domain
