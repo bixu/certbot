@@ -13,20 +13,7 @@ pkg_deps=(
   'core/python'
 )
 pkg_plugins=(
-  'dns-cloudflare'
-  'dns-cloudxns'
-  'dns-digitalocean'
-  'dns-dnsimple'
-  'dns-dnsmadeeasy'
-  'dns-gehirn'
-  'dns-google'
-  'dns-linode'
-  'dns-luadns'
-  'dns-nsone'
-  'dns-ovh'
-  'dns-rfc2136'
   'dns-route53'
-  'dns-sakuracloud'
 )
 pkg_bin_dirs=(bin)
 pkg_svc_user='root'  #TODO: determine security standards for generated certs
