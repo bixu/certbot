@@ -4,11 +4,16 @@ set -e
 
 exec 2>&1
 
+renew_certificates() {
+  echo "$(date) Renewing LetsEncrypt certificates if neccessary"
+  certbot renew \
+    --{{cfg.plugin}} \
+    --config-dir={{pkg.svc_config_path}} \
+    --logs-dir={{pkg.svc_path}}/logs
+}
+
 while true
 do
   sleep {{cfg.renewal_interval}}
-  certbot renew \
-    --{{cfg.plugin}} \
-    --logs-dir={{pkg.svc_path}}/logs \
-    --config-dir={{pkg.svc_config_path}}
+  renew_certificates
 done
