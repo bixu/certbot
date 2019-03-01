@@ -7,11 +7,21 @@ hab config apply --remote-sup=<hostname> <service>.<group> $(date +%s) ./foo.tom
 See https://www.habitat.sh/docs/using-habitat/#config-updates for more on
 configuration updates.
 
+Certificates will be stored at
+```
+/hab/svc/certbot/config/live/<domain name>/*.pem
+```
+which means that you can point configs for other services (like `core/nginx` or
+`core/apache`) at these directories to load certificates. The usual caveats about
+securing `/hab/svc/certbot/config` certainly apply here. You can also consider
+backing up this directory.
+
 #### AWS Credentials
 The current version of this package supports only certificate verification using
 Route53 DNS. You should set the appropriate `AWS_SECRET_ACCESS_KEY` and
 `AWS_ACCESS_KEY_ID` environment variables for the runtime context of the service.
-Here's an example of how `bixu/certbot` might be run as a systemd service:
+Here's an example of how `bixu/certbot` might be run as a systemd service with
+AWS credentials embedded:
 ```
 [Unit]
 Description=Certbot
