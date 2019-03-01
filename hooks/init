@@ -2,7 +2,16 @@
 
 exec 2>&1
 
-certbot certonly \
-  --noninteractive \
-  --{{cfg.plugin}} \
-  --config='{{pkg.svc_config_path}}/{{pkg.name}}.ini' {{#if cfg.dry_run ~}}--dry-run{{/if ~}}
+get_certificate() {
+  echo "Getting LetsEncrypt certificate for '$domain'..."
+  certbot certonly \
+    --domain=$domain \
+    --noninteractive \
+    --{{cfg.plugin}} \
+    --config='{{pkg.svc_config_path}}/{{pkg.name}}.ini'
+}
+
+{{#each cfg.domains as |domain| ~}}
+export domain={{domain.name}}
+get_certificate
+{{/each ~}}

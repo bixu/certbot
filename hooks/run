@@ -4,11 +4,15 @@ set -e
 
 exec 2>&1
 
-while true
-do
-  sleep {{cfg.renewal_interval}}
+renew_certificates() {
   certbot renew \
     --{{cfg.plugin}} \
     --logs-dir={{pkg.svc_path}}/logs \
     --config-dir={{pkg.svc_config_path}}
+}
+
+while true
+do
+  sleep {{cfg.renewal_interval}}
+  renew_certificates
 done
