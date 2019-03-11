@@ -8,9 +8,10 @@ See https://www.habitat.sh/docs/using-habitat/#config-updates for more on
 configuration updates.
 
 Certificates will be stored in the Habitat gossip configuration and can be
-accessed via bindings:
+accessed by binding the service that uses the certs to the Certbot service
+group:
 ```
-hab svc load <origin>/nginx --bind=tls_certificates:certbot.default
+hab svc load <origin>/nginx --bind=tls_certificates:certbot.<group>
 ```
 and the certificate contents can be written out via Habitat Handlebars templates
 like:
