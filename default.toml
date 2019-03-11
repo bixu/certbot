@@ -1,9 +1,0 @@
-admin_email = "admin@example.com"
-plugin = "dns-route53"
-renewal_interval = 3600
-
-[[domains]]
-name = "foo.example.com"
-
-[[domains]]
-name = "bar.example.com"

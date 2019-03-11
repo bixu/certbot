@@ -1,0 +1,13 @@
+#!{{pkgPathFor "core/bash"}}/bin/bash -e
+
+exec 2>&1
+
+source '{{pkg.svc_config_path}}/functions.sh'
+
+while true
+do
+  sleep {{cfg.renewal_interval}}
+  renew_certificates
+  tomlfy_certificates
+  gossip_certificates
+done

@@ -1,5 +1,6 @@
 pkg_name=certbot
 pkg_origin=bixu
+pkg_version=0.2.0
 pkg_maintainer='Blake Irvin <blakeirvin@me.com>, smartB Engineering <dev@smartb.eu>'
 pkg_license=('Apache-2.0')
 pkg_upstream_url='https://certbot.eff.org'
@@ -7,7 +8,6 @@ pkg_description='The Certbot LetsEncrypt client.'
 pkg_build_deps=(
   'bixu/cacher'
 )
-
 pkg_deps=(
   'core/bash'
   'core/python'
@@ -27,6 +27,11 @@ pkg_version() {
     | cut -d'(' -f2 \
     | cut -d')' -f1
 }
+pkg_exports=(
+  [domain]="cfg.domain"
+  [fullchain]="cfg.fullchain"
+  [privkey]="cfg.privkey"
+)
 
 do_before() {
   update_pkg_version
@@ -51,7 +56,7 @@ do_install() {
 # This definition of the `do_after` callback allows us to skip artifact creation
 # (collecting and compressing files inside our package's installation directory)
 # if the `HAB_CREATE_PACKAGE` environment variable is set to 'false'. This can
-# be set in our `.studiorc` file, where it will be ignored for automated builds. 
+# be set in our `.studiorc` file, where it will be ignored for automated builds.
 do_after() {
   if [ $HAB_CREATE_PACKAGE == 'false' ]
   then
@@ -65,6 +70,7 @@ do_after() {
       return 0
     }
   fi
+  return $?
 }
 
 do_strip() {

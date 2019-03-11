@@ -1,15 +1,36 @@
 #!/bin/bash
 
-export HAB_CREATE_PACKAGE=false
+export HAB_CREATE_PACKAGE='false'
 export HAB_HART_COMPRESSION_LEVEL=0
-export HAB_NOCOLORING=true
-export HAB_CERTBOT_DNS_ROUTE53='dry_run = true'
-
+export HAB_NOCOLORING='true'
 export HISTFILE='/src/.bash_history'
-export TERM=xterm
+export TERM='xterm'
+
+hab pkg install core/curl --binlink
+hab pkg install core/jq-static --binlink
 
 run() {
-  source /src/plan.sh
-  echo "  Executing 'hab sup run $pkg_origin/$pkg_name:"
-  hab sup run --no-color $pkg_origin/$pkg_name
+  for plan_path in $1
+  do
+    unset pkg_svc_run_flags
+    source "${plan_path}/plan.sh"
+    hab svc unload "${pkg_origin}/${pkg_name}"
+    build "${plan_path}"
+    echo "Executing 'hab svc load "${pkg_origin}/${pkg_name}" ${pkg_svc_run_flags}'"
+    hab svc load "${pkg_origin}/${pkg_name}" ${pkg_svc_run_flags}
+  done
+  return $?
+}
+
+svc_group() {
+  pkg_ident=$1
+  hab svc status | grep ${pkg_ident} | grep -v "^package" | awk '{print $7}'
+  return $?
+}
+
+svc_group_cfg() {
+  group=$(svc_group $1)
+  group_path=$(echo -n ${group} | sed 's@\.@/@')
+  curl --silent localhost:9631/services/${group_path} | jq '.cfg'
+  return $?
 }

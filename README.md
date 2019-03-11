@@ -7,14 +7,24 @@ hab config apply --remote-sup=<hostname> <service>.<group> $(date +%s) ./foo.tom
 See https://www.habitat.sh/docs/using-habitat/#config-updates for more on
 configuration updates.
 
-Certificates will be stored at
+Certificates will be stored in the Habitat gossip configuration and can be
+accessed via bindings:
 ```
-/hab/svc/certbot/config/live/<domain name>/*.pem
+hab svc load <origin>/nginx --bind=tls_certificates:certbot.default
 ```
-which means that you can point configs for other services (like `core/nginx` or
-`core/apache`) at these directories to load certificates. The usual caveats about
-securing `/hab/svc/certbot/config` certainly apply here. You can also consider
-backing up this directory.
+and the certificate contents can be written out via Habitat Handlebars templates
+like:
+```
+{{~#each bind.tls_certificates.members as |member|}}{{member.cfg.privkey}}{{~/each}}
+```
+See the `nginx` directory in this project for working example code. Note that
+you _must_ ensure your gossiped configs are secure to protect key contents. See
+https://www.habitat.sh/docs/using-habitat/#wire-encryption for more on securing
+Habitat inter-service communication.
+
+#### Testing
+Local dev testing via BATS should be possible by running `./tests/test.sh` See
+https://github.com/sstephenson/bats for more information.
 
 #### AWS Credentials
 The current version of this package supports only certificate verification using
@@ -44,3 +54,5 @@ ownership. Since only a single instance of a Habitat package can be running at
 any given time, it's recommended to use this service to register wildcard
 LetsEncrypt certificates only, so you should configure the `domain` TOML
 key to a value of `*.example.com`, as an example.
+
+We also only support a single LetsEncrypt domain per running `certbot` service.
