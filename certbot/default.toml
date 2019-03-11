@@ -1,4 +1,4 @@
 admin_email = "admin@example.com"
 domain = "*.example.com"
 plugin = "dns-route53"
-renewal_interval = 30
+renewal_interval = 86400 # wait 1 day between renewals by default
