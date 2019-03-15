@@ -57,7 +57,7 @@ do_install() {
 # if the `HAB_CREATE_PACKAGE` environment variable is set to 'false'. This can
 # be set in our `.studiorc` file, where it will be ignored for automated builds.
 do_after() {
-  if [ $HAB_CREATE_PACKAGE == 'false' ]
+  if [ ! -z $HAB_CREATE_PACKAGE ] && [ $HAB_CREATE_PACKAGE == 'false' ]
   then
     build_line "WARN: Skipping artifact creation because 'HAB_CREATE_PACKAGE=false'"
 
