@@ -1,6 +1,6 @@
 pkg_name=certbot
 pkg_origin=bixu
-pkg_version=0.2.0
+pkg_version=0.2.1
 pkg_maintainer='Blake Irvin <blakeirvin@me.com>, smartB Engineering <dev@smartb.eu>'
 pkg_license=('Apache-2.0')
 pkg_upstream_url='https://certbot.eff.org'
