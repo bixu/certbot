@@ -1,0 +1,5 @@
+[certbot]
+plan_path = "certbot"
+
+[nginx]
+plan_path = "nginx"
