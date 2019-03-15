@@ -45,6 +45,6 @@ gossip_certificates() {
   find '/hab/svc/certbot/config/' -name "*_certificate.toml" \
     -print0 \
       | xargs -0 cat > '/hab/svc/certbot/config/certificates.toml'
-  hab config apply "$(service_group $pkg_origin/$pkg_name)" "$(date +%s)" '/hab/svc/certbot/config/certificates.toml'
+  hab config apply "$(service_group {{pkg.name}})" "$(date +%s)" '/hab/svc/certbot/config/certificates.toml'
   return $?
 }
