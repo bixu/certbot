@@ -4,7 +4,10 @@
 
 service_group() {
   pkg_ident=$1
-  hab svc status ${pkg_ident} | grep -v "^package" | awk '{print $7}'
+  hab svc status \
+    | grep ${pkg_ident} \
+    | grep -v "^package" \
+    | awk '{print $7}'
   return $?
 }
 
