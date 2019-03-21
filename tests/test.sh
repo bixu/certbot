@@ -13,9 +13,10 @@ done
 run 'certbot'
 run 'nginx'
 
-until grep 'no renewal failures' '/hab/svc/certbot/logs/letsencrypt.log' &> '/dev/null'
+echo 'Waiting for Certbot to get certificates...'
+until ls /hab/svc/certbot/data/live/* &> '/dev/null'
 do
-  sleep 1
+  sleep 5
 done
 
 sleep 5
