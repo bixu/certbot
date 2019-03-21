@@ -27,7 +27,7 @@ renew_certificates() {
   certbot renew \
     --{{cfg.plugin}} \
     --config-dir='{{pkg.svc_data_path}}' \
-    --logs-dir='{{pkg.svc_logs_path}}'
+    --logs-dir='{{pkg.svc_path}}/logs'
   return $?
 }
 
