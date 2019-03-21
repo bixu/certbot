@@ -9,6 +9,7 @@ pkg_build_deps=(
 )
 pkg_deps=(
   'core/bash'
+  'core/findutils'
   'core/python'
 )
 # The `pkg_plugins` array should be populated with suffixes used to identify
