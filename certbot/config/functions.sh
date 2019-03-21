@@ -16,7 +16,7 @@ get_certificates() {
   echo "$(date) Getting any needed LetsEncrypt certificates for '{{cfg.domain}}'"
   certbot certonly \
     --{{cfg.plugin}} \
-    --config='/hab/svc/certbot/config/certbot.ini' \
+    --config='{{pkg.svc_config_path}}/certbot.ini' \
     --domain='{{cfg.domain}}' \
     --noninteractive
   return $?
@@ -26,25 +26,32 @@ renew_certificates() {
   echo "$(date) Renewing LetsEncrypt certificates if neccessary"
   certbot renew \
     --{{cfg.plugin}} \
-    --config-dir='/hab/svc/certbot/config' \
-    --logs-dir='/hab/svc/certbot/logs'
+    --config-dir='{{pkg.svc_data_path}}' \
+    --logs-dir='{{pkg.svc_logs_path}}'
   return $?
 }
 
 tomlfy_certificates() {
   for key in 'privkey' 'fullchain'
   do
-    path=$(find /hab/svc/certbot/config/live/ -name "*${key}*pem")
-    echo "${key} = '''$(cat ${path})'''" > "/hab/svc/certbot/config/${key}_certificate.toml"
+    path=$(find '{{pkg.svc_data_path}}/live/' -name "*${key}*pem")
+    if [ -f $path ]
+    then
+      echo "$key = '''" > "{{pkg.svc_data_path}}/${key}_certificate.toml"
+      echo "$(cat $path)" >> "{{pkg.svc_data_path}}/${key}_certificate.toml"
+      echo "'''" >> "{{pkg.svc_data_path}}/${key}_certificate.toml"
+    else
+      exit 1
+    fi
   done
   return $?
 }
 
 gossip_certificates() {
   # shellcheck disable=SC2044
-  find '/hab/svc/certbot/config/' -name "*_certificate.toml" \
+  find '{{pkg.svc_data_path}}/' -name "*_certificate.toml" \
     -print0 \
-      | xargs -0 cat > '/hab/svc/certbot/config/certificates.toml'
-  hab config apply "$(service_group {{pkg.name}})" "$(date +%s)" '/hab/svc/certbot/config/certificates.toml'
+      | xargs -0 cat > '{{pkg.svc_data_path}}/certificates.toml'
+  hab config apply "$(service_group {{pkg.name}})" "$(date +%s)" '{{pkg.svc_data_path}}/certificates.toml'
   return $?
 }
