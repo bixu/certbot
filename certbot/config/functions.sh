@@ -35,7 +35,7 @@ tomlfy_certificates() {
   for key in 'privkey' 'fullchain'
   do
     path=$(find '{{pkg.svc_data_path}}/live/' -name "*${key}*pem")
-    if [ -f $path ]
+    if ls "$path" | grep ".pem$" &> '/dev/null'
     then
       echo "$key = '''" > "{{pkg.svc_data_path}}/${key}_certificate.toml"
       echo "$(cat $path)" >> "{{pkg.svc_data_path}}/${key}_certificate.toml"
