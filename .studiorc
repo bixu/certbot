@@ -9,15 +9,21 @@ export TERM='xterm'
 hab pkg install core/curl --binlink
 hab pkg install core/jq-static --binlink
 
-run() {
-  for plan_path in $1
+svc() {
+  local action=$1
+  for plan_path in $2
   do
     unset pkg_svc_run_flags
     source "${plan_path}/plan.sh"
     hab svc unload "${pkg_origin}/${pkg_name}"
     build "${plan_path}"
-    echo "Executing 'hab svc load "${pkg_origin}/${pkg_name}" ${pkg_svc_run_flags}'"
-    hab svc load "${pkg_origin}/${pkg_name}" ${pkg_svc_run_flags}
+    if [ $action == 'run' ]
+    then
+      hab sup run "${pkg_origin}/${pkg_name}" ${pkg_svc_run_flags}
+    elif [ $action == 'load' ]
+    then
+      hab svc load "${pkg_origin}/${pkg_name}" ${pkg_svc_run_flags}
+    fi
   done
   return $?
 }
