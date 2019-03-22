@@ -34,14 +34,13 @@ renew_certificates() {
 tomlfy_certificates() {
   for key in 'privkey' 'fullchain'
   do
-    path=$(find '{{pkg.svc_data_path}}/live/' -name "*${key}*pem")
-    if ls "$path" | grep ".pem$" &> '/dev/null'
+    if ls {{pkg.svc_data_path}}/live/*/${key}.pem &> '/dev/null'
     then
       echo "$key = '''" > "{{pkg.svc_data_path}}/${key}_certificate.toml"
-      echo "$(cat $path)" >> "{{pkg.svc_data_path}}/${key}_certificate.toml"
+      echo "$(cat {{pkg.svc_data_path}}/live/*/${key}.pem)" >> "{{pkg.svc_data_path}}/${key}_certificate.toml"
       echo "'''" >> "{{pkg.svc_data_path}}/${key}_certificate.toml"
     else
-      exit 1
+      break
     fi
   done
   return $?
