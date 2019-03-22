@@ -5,16 +5,16 @@ set -e
 until hab svc status &> '/dev/null'
 do
   hab pkg install 'core/hab-sup'
-  hab sup run > 'nohup.out' &
+  hab sup run --no-color > 'nohup.out' &
   sleep 3
 done
 
 . '.studiorc'
-run 'certbot'
-run 'nginx'
+svc load 'certbot'
+svc load 'nginx'
 
 echo 'Waiting for Certbot to get certificates...'
-until ls /hab/svc/certbot/data/live/* &> '/dev/null'
+until grep 'END PRIVATE KEY' '/hab/svc/nginx/config/privkey.pem' &> '/dev/null' && hab svc status 'bixu/nginx' | grep -v down &> '/dev/null'
 do
   sleep 5
 done
