@@ -1,7 +1,7 @@
 source "${BATS_TEST_DIRNAME}/../nginx/plan.sh"
 
 @test "Nginx is running" {
-  result=$(hab svc status ${pkg_origin}/${pkg_name} | grep -v "^package" | awk '{print $4}')
+  result=$(hab svc status "${pkg_origin}/${pkg_name}" | grep -v "^package" | awk '{print $4}')
   [ "$result" = "up" ]
 }
 
