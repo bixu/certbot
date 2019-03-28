@@ -4,7 +4,7 @@ pkg_version=1.15.6
 pkg_description="NGINX web server."
 pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
 pkg_license=('BSD-2-Clause')
-pkg_upstream_url=https://nginx.org/
+pkg_upstream_url='https://nginx.org/'
 pkg_build_deps=(
   'core/bats'
   'core/busybox-static'
@@ -33,8 +33,8 @@ do_build() {
 do_install() {
   for file in $(find $(hab pkg path core/nginx)/config -type f | grep -v 'nginx.conf')
   do
-    mkdir --parents $pkg_prefix/config/
-    cp -p $file $pkg_prefix/config/
+    mkdir --parents "$pkg_prefix/config/"
+    cp -p "$file" "$pkg_prefix/config/"
   done
   return $?
 }
