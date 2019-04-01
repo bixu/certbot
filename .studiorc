@@ -6,8 +6,8 @@ export HAB_NOCOLORING='true'
 export HISTFILE='/src/.bash_history'
 export TERM='xterm'
 
-hab pkg install core/curl --binlink
-hab pkg install core/jq-static --binlink
+hab pkg install 'core/curl' --binlink
+hab pkg install 'core/jq-static' --binlink
 
 svc() {
   local action=$1
@@ -39,6 +39,6 @@ svc_group() {
 svc_group_cfg() {
   group=$(svc_group $1)
   group_path=$(echo -n ${group} | sed 's@\.@/@')
-  curl --silent localhost:9631/services/${group_path} | jq '.cfg'
+  curl --silent "localhost:9631/services/${group_path}" | jq '.cfg'
   return $?
 }
