@@ -4,9 +4,6 @@ exec 2>&1
 source '{{pkg.svc_config_path}}/functions.sh'
 
 get_certificates
-tomlfy_certificates
-gossip_certificates
-sleep {{cfg.renewal_interval}}
 
 while true
 do
