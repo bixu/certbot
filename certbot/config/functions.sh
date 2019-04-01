@@ -31,18 +31,18 @@ renew_certificates() {
   return $?
 }
 
-pem_is_valid() {
+contains_pem() {
   local pem=$1
   local domain=$2
-  head -n1 "$pem" | grep '\-\-\-\-\-BEGIN ' &> '/dev/null' \
-    && tail -n1 "$pem" | grep '\-\-\-\-\-END ' &> '/dev/null'
+  grep '\-\-\-\-\-BEGIN ' "$pem" &> '/dev/null' \
+    && grep '\-\-\-\-\-END ' "$pem" &> '/dev/null'
   return $?
 }
 
 tomlfy_certificates() {
   for key in 'privkey' 'fullchain'
   do
-    if pem_is_valid {{pkg.svc_data_path}}/live/*/${key}.pem '{{cfg.domain}}'
+    if contains_pem {{pkg.svc_data_path}}/live/*/${key}.pem '{{cfg.domain}}'
     then
       echo "${key} = '''" > "{{pkg.svc_data_path}}/${key}_certificate.toml"
       echo "$(cat {{pkg.svc_data_path}}/live/*/${key}.pem)" >> "{{pkg.svc_data_path}}/${key}_certificate.toml"
