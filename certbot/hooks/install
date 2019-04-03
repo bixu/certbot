@@ -1,0 +1,21 @@
+#!{{pkgPathFor "core/bash"}}/bin/bash
+exec 2>&1
+
+get_certificates() {
+  # shellcheck disable=SC2154
+  echo "$(date) Getting any needed LetsEncrypt certificates for '{{cfg.domain}}'"
+  certbot certonly \
+    --{{cfg.plugin}} \
+    --agree-tos \
+    --config-dir='{{pkg.svc_data_path}}' \
+    --domain='{{cfg.domain}}' \
+    --email='{{cfg.admin_email}}' \
+    --logs-dir='{{pkg.svc_path}}/logs' \
+    --noninteractive \
+    --rsa-key-size='4096' \
+    --server='{{cfg.server}}' \
+    --work-dir='{{pkg.svc_var_path}}'
+  return $?
+}
+
+get_certificates

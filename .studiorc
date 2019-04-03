@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export HAB_CREATE_PACKAGE='false'
+export HAB_CREATE_PACKAGE='true'
 export HAB_HART_COMPRESSION_LEVEL=0
 export HAB_NOCOLORING='true'
 export HISTFILE='/src/.bash_history'
@@ -19,6 +19,8 @@ svc() {
     hab origin key download --secret "${pkg_origin}"
     hab svc unload "${pkg_origin}/${pkg_name}"
     build "${plan_path}"
+    source './results/last_build.env'
+    hab pkg install "./results/${pkg_artifact}"
     if [ $action == 'run' ]
     then
       hab sup run "${pkg_origin}/${pkg_name}" ${pkg_svc_run_flags}

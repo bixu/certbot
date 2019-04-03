@@ -1,5 +1,12 @@
 ### About This Service Package
-Set configuration values in your own `.toml` file and override the default
+Because this service package makes use of the `install` hook, you must set
+```
+export HAB_FEAT_INSTALL_HOOK="true"
+```
+before installing the package. Otherwise the initial certificate fetch will not
+happen.
+
+Set custom configuration values in your own `.toml` file and override the default
 configurations in `default.toml` like this:
 ```
 hab config apply --remote-sup=<hostname> <service>.<group> $(date +%s) ./foo.toml

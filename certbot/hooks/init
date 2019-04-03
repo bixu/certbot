@@ -1,6 +1,0 @@
-#!{{pkgPathFor "core/bash"}}/bin/bash
-exec 2>&1
-
-source '{{pkg.svc_config_path}}/functions.sh'
-
-get_certificates
