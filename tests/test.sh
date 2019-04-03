@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 hab pkg install 'core/bats'
 hab pkg install 'core/busybox-static'
@@ -20,7 +20,9 @@ source '/src/.studiorc'
 svc load 'certbot'
 svc load 'nginx'
 
-until hab svc status 'bixu/nginx' | grep -v 'down' &> '/dev/null'
+sleep 5
+
+until hab svc status | grep 'bixu/nginx' | grep -v 'down' &> '/dev/null'
 do
   sleep 1
 done
