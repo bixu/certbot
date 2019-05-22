@@ -1,25 +1,26 @@
 pkg_name=certbot
 pkg_origin=bixu
-pkg_maintainer='Blake Irvin <blakeirvin@me.com>, smartB Engineering <dev@smartb.eu>'
-pkg_license=('Apache-2.0')
-pkg_upstream_url='https://certbot.eff.org'
-pkg_description='The Certbot LetsEncrypt client.'
+pkg_maintainer="Blake Irvin <blakeirvin@me.com>, smartB Engineering <dev@smartb.eu>"
+pkg_license=("Apache-2.0")
+pkg_upstream_url="https://certbot.eff.org"
+pkg_description="The Certbot LetsEncrypt client."
 pkg_build_deps=(
-  'bixu/cacher'
+  "bixu/cacher"
 )
 pkg_deps=(
-  'core/bash'
-  'core/findutils'
-  'core/python'
+  "core/bash/4.4.19"
+  "core/findutils"
+  "core/gawk/4.2.0"
+  "core/python"
 )
 # The `pkg_plugins` array should be populated with suffixes used to identify
 # `certbot` plugins in the Python module ecosystem. For example, `dns-google`,
 # as in `certbot-dns-google`:
 pkg_plugins=(
-  'dns-route53'
+  "dns-route53"
 )
 pkg_bin_dirs=(bin)
-pkg_svc_user='root'  #TODO: determine security standards for generated certs
+pkg_svc_user="root"  #TODO: determine security standards for generated certs
 
 pkg_version() {
   pip --disable-pip-version-check search "$pkg_name" \
@@ -58,7 +59,7 @@ do_install() {
 # if the `HAB_CREATE_PACKAGE` environment variable is set to 'false'. This can
 # be set in our `.studiorc` file, where it will be ignored for automated builds.
 do_after() {
-  if [ ! -z $HAB_CREATE_PACKAGE ] && [ $HAB_CREATE_PACKAGE == 'false' ]
+  if [ ! -z $HAB_CREATE_PACKAGE ] && [ $HAB_CREATE_PACKAGE == "false" ]
   then
     build_line "WARN: Skipping artifact creation because 'HAB_CREATE_PACKAGE=false'"
 
