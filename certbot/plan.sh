@@ -22,21 +22,11 @@ pkg_plugins=(
 pkg_bin_dirs=(bin)
 pkg_svc_user="root"  #TODO: determine security standards for generated certs
 
-pkg_version() {
-  pip --disable-pip-version-check search "$pkg_name" \
-    | grep "^$pkg_name " \
-    | cut -d'(' -f2 \
-    | cut -d')' -f1
-}
 pkg_exports=(
   [domain]="cfg.domain"
   [fullchain]="cfg.fullchain"
   [privkey]="cfg.privkey"
 )
-
-do_before() {
-  update_pkg_version
-}
 
 do_prepare() {
   python -m venv "$pkg_prefix"
