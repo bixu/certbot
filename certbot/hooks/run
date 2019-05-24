@@ -49,12 +49,18 @@ gossip_certificates() {
   find '{{pkg.svc_data_path}}/' -name "*_certificate.toml" \
     -print0 \
       | xargs -0 cat > '{{pkg.svc_data_path}}/certificates.toml'
-  hab config apply "$(service_group {{pkg.name}})" "$(date +%s)" '{{pkg.svc_data_path}}/certificates.toml'
+  
+  if grep BEGIN {{pkg.svc_data_path}}/certificates.toml &> /dev/null && grep END {{pkg.svc_data_path}}/certificates.toml &> /dev/null
+  then
+    echo "Certificate data found in {{pkg.svc_data_path}}/certificates.toml. Applying to gossip config."
+    hab config apply "$(service_group {{pkg.name}})" "$(date +%s)" '{{pkg.svc_data_path}}/certificates.toml'
+  fi
   return $?
 }
 
 while true
 do
+  gossip_certificates
   renew_certificates
   tomlfy_certificates
   gossip_certificates
