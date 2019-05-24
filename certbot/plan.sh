@@ -10,8 +10,6 @@ pkg_build_deps=(
 )
 pkg_deps=(
   "core/bash/4.4.19"
-  "core/findutils"
-  "core/gawk/4.2.0"
   "core/python"
 )
 # The `pkg_plugins` array should be populated with suffixes used to identify
