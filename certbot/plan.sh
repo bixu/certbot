@@ -39,7 +39,7 @@ do_build() {
 do_install() {
   for plugin in ${pkg_plugins[@]}
   do
-    pip --disable-pip-version-check install "$pkg_name-$plugin==$pkg_version"
+    pip --disable-pip-version-check install "urllib3==1.24.3" "$pkg_name-$plugin==$pkg_version"
   done
 }
 
